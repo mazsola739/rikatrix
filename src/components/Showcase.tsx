@@ -196,7 +196,7 @@ export function Showcase() {
     <div className={ready ? 'site site--ready' : 'site'}>
       <nav className="nav">
         <a className="pill" href={LINKS.portfolio}>
-          ← mazsola739
+          Portfolio
         </a>
         <a className="pill" href={LINKS.repo}>
           GitHub
