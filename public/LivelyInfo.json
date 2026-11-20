@@ -1,0 +1,14 @@
+{
+  "AppVersion": "1.0.0.0",
+  "Title": "Rikatrix",
+  "Thumbnail": "thumbnail.jpg",
+  "Preview": null,
+  "Desc": "Matrix rain in a paint swirl, in pink, lavender and ice blue, with glitter and sushi recipes.",
+  "Author": "mazsola739",
+  "License": "MIT",
+  "Contact": "https://mazsola739.github.io/rikatrix/",
+  "Type": 1,
+  "FileName": "index.html",
+  "Arguments": null,
+  "IsAbsolutePath": false
+}

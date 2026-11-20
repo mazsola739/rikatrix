@@ -1,0 +1,28 @@
+{
+  "name": "rika-windows",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "dev:site": "vite --mode site",
+    "build": "tsc -b && vite build",
+    "build:site": "tsc -b && vite build --mode site",
+    "lint": "oxlint",
+    "preview": "vite preview",
+    "package": "npm run build && powershell -NoProfile -Command \"Compress-Archive -Path dist/* -DestinationPath rikatrix.zip -Force\""
+  },
+  "dependencies": {
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.6",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.3.0",
+    "oxlint": "^1.94.0",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.8"
+  }
+}

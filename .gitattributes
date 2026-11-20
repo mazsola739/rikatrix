@@ -1,0 +1,4 @@
+# Keep LF everywhere, even with core.autocrlf on Windows.
+* text=auto eol=lf
+*.jpg binary
+package-lock.json text eol=lf -diff
