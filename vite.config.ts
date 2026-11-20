@@ -43,6 +43,26 @@ function inlineIntoHtml(): Plugin {
 }
 
 /**
+ * The showcase's display font (Share Tech Mono, SIL OFL, in site-public/fonts/) starts loading
+ * with the HTML itself instead of after the JavaScript, so the text never swaps fonts mid-load.
+ * Only the site build gets it; the wallpaper never needs the file.
+ */
+function siteFont(): Plugin {
+  const href = './fonts/share-tech-mono.woff2'
+  return {
+    name: 'rika:site-font',
+    transformIndexHtml: () => [
+      { tag: 'link', attrs: { rel: 'preload', href, as: 'font', type: 'font/woff2', crossorigin: '' }, injectTo: 'head' },
+      {
+        tag: 'style',
+        children: `@font-face{font-family:'Share Tech Mono';src:url(${href}) format('woff2');font-display:block}`,
+        injectTo: 'head',
+      },
+    ],
+  }
+}
+
+/**
  * Two builds from one codebase:
  * - default: the Lively wallpaper → dist/ (one self-contained index.html + Lively files)
  * - `--mode site`: the showcase page for GitHub Pages → dist-site/
@@ -51,7 +71,7 @@ export default defineConfig(({ mode }) => {
   if (mode === 'site') {
     return {
       base: './',
-      plugins: [react()],
+      plugins: [react(), siteFont()],
       publicDir: 'site-public',
       server: { port: 5200, strictPort: true },
       build: { outDir: 'dist-site' },

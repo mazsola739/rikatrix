@@ -8,7 +8,8 @@
   --glass: rgb(6 16 42 / 0.58);
   --line: rgb(255 255 255 / 0.12);
   --scrim: 4 10 30;
-  --display: 'M PLUS Rounded 1c', 'Segoe UI', system-ui, sans-serif;
+  /* a terminal font, like the Matrix code; it only has one weight, so it's never bolded */
+  --display: 'Share Tech Mono', ui-monospace, 'Cascadia Mono', Consolas, monospace;
 
   position: fixed;
   inset: 0;
@@ -17,6 +18,13 @@
   scroll-behavior: smooth;
   color: var(--ink);
   font: 16px/1.6 'Segoe UI', system-ui, sans-serif;
+  /* fades in once the font is ready, so nothing jumps while it loads (the rain shows right away) */
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.site--ready {
+  opacity: 1;
 }
 
 .site a {
@@ -27,6 +35,7 @@
 .site h2,
 .site h3 {
   color: #fff;
+  font-weight: 400;
 }
 
 /* ---------- top bar ---------- */
@@ -51,7 +60,7 @@
   background: rgb(var(--scrim) / 0.55);
   backdrop-filter: blur(8px);
   color: var(--ink);
-  font: 700 14px/1.2 var(--display);
+  font: 400 15px/1.2 var(--display);
   text-decoration: none;
   transition: background 0.15s;
 }
@@ -99,20 +108,50 @@
 .eyebrow {
   margin: 0 0 14px;
   color: var(--ice);
-  font: 700 13px/1.4 var(--display);
-  letter-spacing: 0.16em;
+  font: 400 15px/1.4 var(--display);
+  letter-spacing: 0.14em;
   text-transform: uppercase;
 }
 
 .hero__title {
+  display: flex;
+  align-items: center;
   margin: 0;
-  font: 800 clamp(64px, 12vw, 150px) / 0.95 var(--display);
-  letter-spacing: -0.03em;
-  text-shadow: 0 0 44px rgb(255 111 168 / 0.45);
+  font: 400 clamp(60px, 12vw, 150px) / 1 var(--display);
+  white-space: nowrap;
+  text-shadow:
+    0 0 14px rgb(255 255 255 / 0.35),
+    0 0 44px rgb(255 111 168 / 0.45);
 }
 
-.hero__title span {
+/* every letter in a fixed 1ch box, so the decode scramble never shifts the layout */
+.hero__letter {
+  display: inline-block;
+  width: 1ch;
+  text-align: center;
+}
+
+.hero__letter--pink {
   color: var(--pink);
+  text-shadow:
+    0 0 14px rgb(255 156 203 / 0.6),
+    0 0 44px rgb(255 111 168 / 0.55);
+}
+
+.hero__cursor {
+  display: inline-block;
+  width: 0.45ch;
+  height: 0.78em;
+  margin-left: 0.12ch;
+  background: var(--pink);
+  box-shadow: 0 0 18px rgb(255 111 168 / 0.7);
+  animation: blink 1.05s steps(1) infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
 }
 
 .hero__tagline {
@@ -142,7 +181,7 @@
   border-radius: 999px;
   background: rgb(255 255 255 / 0.06);
   color: var(--muted);
-  font-size: 13px;
+  font: 400 14px/1.4 var(--display);
 }
 
 .site .scroll-cue {
@@ -150,7 +189,7 @@
   bottom: 28px;
   left: 50%;
   color: var(--muted);
-  font: 700 13px/1 var(--display);
+  font: 400 14px/1 var(--display);
   text-decoration: none;
   transform: translateX(-50%);
   animation: bob 2.2s ease-in-out infinite;
@@ -172,7 +211,7 @@
   border: 1px solid transparent;
   border-radius: 999px;
   color: #fff;
-  font: 700 16px/1 var(--display);
+  font: 400 17px/1 var(--display);
   text-decoration: none;
   transition:
     transform 0.15s,
@@ -206,7 +245,7 @@
 
 .site .btn--big {
   padding: 18px 34px;
-  font-size: 18px;
+  font-size: 19px;
 }
 
 /* ---------- sections ---------- */
@@ -229,7 +268,7 @@
 
 .site h2 {
   margin: 0 0 6px;
-  font: 800 clamp(26px, 3.4vw, 34px) / 1.15 var(--display);
+  font: 400 clamp(28px, 3.6vw, 38px) / 1.15 var(--display);
 }
 
 .section-head p {
@@ -258,7 +297,7 @@
   border: 0;
   background: none;
   color: var(--ink);
-  font: 700 14px/1.2 var(--display);
+  font: 400 15px/1.2 var(--display);
   text-align: left;
   cursor: pointer;
 }
@@ -323,7 +362,7 @@
 
 .try__label {
   color: var(--muted);
-  font: 700 12px/1 var(--display);
+  font: 400 13px/1 var(--display);
   letter-spacing: 0.14em;
   text-transform: uppercase;
 }
@@ -342,7 +381,7 @@
   border-radius: 999px;
   background: transparent;
   color: var(--ink);
-  font: 700 14px/1 var(--display);
+  font: 400 15px/1 var(--display);
   cursor: pointer;
 }
 
@@ -359,7 +398,7 @@
   border: 0;
   background: none;
   color: var(--ink);
-  font: 700 14px/1 var(--display);
+  font: 400 15px/1 var(--display);
   cursor: pointer;
 }
 
@@ -412,12 +451,13 @@
   border-radius: 14px;
   background: rgb(255 111 168 / 0.16);
   color: var(--pink);
-  font: 800 24px/1 var(--display);
+  font-size: 24px;
+  line-height: 1;
 }
 
 .site h3 {
   margin: 0 0 6px;
-  font: 800 20px/1.25 var(--display);
+  font: 400 22px/1.25 var(--display);
 }
 
 .feature p,
@@ -451,13 +491,13 @@
 .step__num {
   display: block;
   margin-bottom: 10px;
-  color: transparent;
-  font: 800 36px/1 var(--display);
-  -webkit-text-stroke: 1.5px var(--pink);
+  color: var(--pink);
+  font: 400 38px/1 var(--display);
+  text-shadow: 0 0 16px rgb(255 111 168 / 0.5);
 }
 
 .site .step h3 {
-  font-size: 18px;
+  font-size: 19px;
 }
 
 /* closing call to action, straight on the rain with a soft scrim */
@@ -484,7 +524,7 @@
 .footer {
   padding: 8px 24px 40px;
   color: var(--muted);
-  font-size: 14px;
+  font: 400 14px/1.6 var(--display);
   text-align: center;
 }
 
@@ -526,9 +566,11 @@
 @media (prefers-reduced-motion: reduce) {
   .site {
     scroll-behavior: auto;
+    transition: none;
   }
 
-  .site .scroll-cue {
+  .site .scroll-cue,
+  .hero__cursor {
     animation: none;
   }
 }
@@ -547,7 +589,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  font: 600 13px/1 'Segoe UI', system-ui, sans-serif;
+  font: 400 14px/1 'Share Tech Mono', ui-monospace, Consolas, monospace;
   transition: opacity 0.4s;
 }
 

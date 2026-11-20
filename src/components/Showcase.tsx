@@ -1,21 +1,69 @@
-import { useEffect, type ReactNode } from 'react'
+import { useEffect, useState, type ReactNode } from 'react'
 import { THEMES } from '../engine/palette'
 import { LINKS, MOUSE_EFFECT_NAMES, THEME_NAMES } from '../labels'
 import { updateSettings, useSettings } from '../settings'
 import { Demo, useDemo } from './Demo'
 import './showcase.css'
 
-const FONT_URL = 'https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700;800&display=swap'
-
-/** The headings use a rounded Japanese font. It's loaded here, so only the showcase fetches it, never the wallpaper. */
-function useShowcaseFont() {
+/**
+ * True once the display font has loaded (the site build preloads it with the HTML), or after a
+ * short timeout. The page fades in only then, so the text never jumps from one font to another.
+ */
+function useFontsReady(timeoutMs = 1500) {
+  const [ready, setReady] = useState(false)
   useEffect(() => {
-    if (document.querySelector(`link[href="${FONT_URL}"]`)) return
-    const link = document.createElement('link')
-    link.rel = 'stylesheet'
-    link.href = FONT_URL
-    document.head.append(link)
-  }, [])
+    let cancelled = false
+    const finish = () => {
+      if (!cancelled) setReady(true)
+    }
+    const timer = window.setTimeout(finish, timeoutMs)
+    document.fonts.load("1em 'Share Tech Mono'").then(finish, finish)
+    return () => {
+      cancelled = true
+      window.clearTimeout(timer)
+    }
+  }, [timeoutMs])
+  return ready
+}
+
+const TITLE = 'Rikatrix'
+/** "Rika" is pink, "trix" is white */
+const PINK_LETTERS = 4
+const SCRAMBLE = Array.from('ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝ0123456789')
+const randomGlyph = () => SCRAMBLE[Math.floor(Math.random() * SCRAMBLE.length)]
+
+/** The title decodes from katakana into "Rikatrix", letter by letter like the Matrix code, then a cursor blinks. */
+function DecodeTitle({ start }: { start: boolean }) {
+  const [done, setDone] = useState(() => window.matchMedia('(prefers-reduced-motion: reduce)').matches)
+  const [chars, setChars] = useState(() => Array.from(TITLE, randomGlyph))
+
+  useEffect(() => {
+    if (!start || done) return
+    const startedAt = performance.now()
+    const timer = window.setInterval(() => {
+      // after a short scramble the letters settle from left to right
+      const settled = Math.floor((performance.now() - startedAt - 250) / 90)
+      setChars(Array.from(TITLE, (ch, i) => (i < settled ? ch : randomGlyph())))
+      if (settled >= TITLE.length) {
+        window.clearInterval(timer)
+        setDone(true)
+      }
+    }, 45)
+    return () => window.clearInterval(timer)
+  }, [start, done])
+
+  const shown = done ? Array.from(TITLE) : chars
+  return (
+    <h1 className="hero__title" aria-label={TITLE}>
+      {shown.map((ch, i) => (
+        // every letter has a fixed 1ch box, so the scramble never shifts the layout
+        <span key={i} aria-hidden="true" className={i < PINK_LETTERS ? 'hero__letter hero__letter--pink' : 'hero__letter'}>
+          {ch}
+        </span>
+      ))}
+      <span className="hero__cursor" aria-hidden="true" />
+    </h1>
+  )
 }
 
 function WindowsIcon() {
@@ -135,7 +183,7 @@ const STEPS: { title: string; text: ReactNode }[] = [
 export function Showcase() {
   const settings = useSettings()
   const { demo, enterDemo, exitDemo } = useDemo()
-  useShowcaseFont()
+  const ready = useFontsReady()
 
   // let visitors play with the mouse right away
   useEffect(() => {
@@ -145,7 +193,7 @@ export function Showcase() {
   if (demo) return <Demo onExit={exitDemo} />
 
   return (
-    <div className="site">
+    <div className={ready ? 'site site--ready' : 'site'}>
       <nav className="nav">
         <a className="pill" href={LINKS.portfolio}>
           ← mazsola739
@@ -158,9 +206,7 @@ export function Showcase() {
       <header className="hero">
         <div className="hero__inner">
           <p className="eyebrow">リカトリクス · animated wallpaper for Windows</p>
-          <h1 className="hero__title">
-            <span>Rika</span>trix
-          </h1>
+          <DecodeTitle start={ready} />
           <p className="hero__tagline">
             Matrix rain for your desktop, in pink, lavender and ice blue. With glitter, smoke veils and real sushi
             recipes falling down the screen.
