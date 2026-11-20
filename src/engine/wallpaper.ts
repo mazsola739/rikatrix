@@ -143,9 +143,9 @@ export class Wallpaper {
   }
 
   private onDown(e: MouseEvent) {
-    // clicks on the settings panel or the showcase page's cards and buttons shouldn't splash
+    // clicks on the settings panel or the showcase page's panels and buttons shouldn't splash
     const target = e.target instanceof Element ? e.target : null
-    if (this.settings.mouseEffect === 0 || target?.closest('.panel, .card, a, button')) return
+    if (this.settings.mouseEffect === 0 || target?.closest('.panel, .glass, a, button')) return
     this.particles.splash(e.clientX, e.clientY, this.sprites)
   }
 

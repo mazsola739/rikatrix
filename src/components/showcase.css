@@ -1,0 +1,586 @@
+/* The showcase page (npm run dev:site / build:site). The live wallpaper canvas sits behind it. */
+.site {
+  --ink: #f4f7ff;
+  --muted: #b9c6e4;
+  --pink: #ff9ccb;
+  --pink-strong: #ff6fa8;
+  --ice: #9fe3fb;
+  --glass: rgb(6 16 42 / 0.58);
+  --line: rgb(255 255 255 / 0.12);
+  --scrim: 4 10 30;
+  --display: 'M PLUS Rounded 1c', 'Segoe UI', system-ui, sans-serif;
+
+  position: fixed;
+  inset: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  color: var(--ink);
+  font: 16px/1.6 'Segoe UI', system-ui, sans-serif;
+}
+
+.site a {
+  color: var(--ice);
+}
+
+.site h1,
+.site h2,
+.site h3 {
+  color: #fff;
+}
+
+/* ---------- top bar ---------- */
+
+.nav {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 20px 24px;
+}
+
+.site .pill {
+  padding: 7px 16px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgb(var(--scrim) / 0.55);
+  backdrop-filter: blur(8px);
+  color: var(--ink);
+  font: 700 14px/1.2 var(--display);
+  text-decoration: none;
+  transition: background 0.15s;
+}
+
+.site .pill:first-child {
+  color: var(--pink);
+}
+
+.site .pill:hover {
+  background: rgb(var(--scrim) / 0.8);
+}
+
+/* ---------- hero: no box, just a soft scrim so the rain stays visible ---------- */
+
+.hero {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: center;
+  min-height: 100svh;
+  padding: 96px 24px 96px;
+  box-sizing: border-box;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(
+    ellipse 70% 75% at 22% 50%,
+    rgb(var(--scrim) / 0.85),
+    rgb(var(--scrim) / 0.45) 55%,
+    transparent 85%
+  );
+  pointer-events: none;
+}
+
+.hero__inner {
+  width: 100%;
+  max-width: 1132px;
+  margin: 0 auto;
+}
+
+.eyebrow {
+  margin: 0 0 14px;
+  color: var(--ice);
+  font: 700 13px/1.4 var(--display);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.hero__title {
+  margin: 0;
+  font: 800 clamp(64px, 12vw, 150px) / 0.95 var(--display);
+  letter-spacing: -0.03em;
+  text-shadow: 0 0 44px rgb(255 111 168 / 0.45);
+}
+
+.hero__title span {
+  color: var(--pink);
+}
+
+.hero__tagline {
+  max-width: 42ch;
+  margin: 22px 0 30px;
+  font-size: clamp(18px, 2.2vw, 21px);
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 24px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.badges li {
+  padding: 4px 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.06);
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.site .scroll-cue {
+  position: absolute;
+  bottom: 28px;
+  left: 50%;
+  color: var(--muted);
+  font: 700 13px/1 var(--display);
+  text-decoration: none;
+  transform: translateX(-50%);
+  animation: bob 2.2s ease-in-out infinite;
+}
+
+@keyframes bob {
+  50% {
+    transform: translate(-50%, 6px);
+  }
+}
+
+/* ---------- buttons ---------- */
+
+.site .btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 26px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  color: #fff;
+  font: 700 16px/1 var(--display);
+  text-decoration: none;
+  transition:
+    transform 0.15s,
+    box-shadow 0.15s,
+    background 0.15s;
+}
+
+.btn--primary {
+  background: var(--pink-strong);
+  box-shadow:
+    0 8px 30px rgb(255 111 168 / 0.45),
+    inset 0 1px 0 rgb(255 255 255 / 0.3);
+}
+
+.btn--primary:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 12px 36px rgb(255 111 168 / 0.6),
+    inset 0 1px 0 rgb(255 255 255 / 0.3);
+}
+
+.site .btn--ghost {
+  border-color: rgb(255 255 255 / 0.3);
+  background: rgb(255 255 255 / 0.06);
+  backdrop-filter: blur(8px);
+}
+
+.btn--ghost:hover {
+  background: rgb(255 255 255 / 0.14);
+}
+
+.site .btn--big {
+  padding: 18px 34px;
+  font-size: 18px;
+}
+
+/* ---------- sections ---------- */
+
+.sections {
+  display: grid;
+  gap: 24px;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 24px 24px 24px;
+  box-sizing: border-box;
+}
+
+.glass {
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  background: var(--glass);
+  backdrop-filter: blur(14px);
+}
+
+.site h2 {
+  margin: 0 0 6px;
+  font: 800 clamp(26px, 3.4vw, 34px) / 1.15 var(--display);
+}
+
+.section-head p {
+  margin: 0;
+  color: var(--muted);
+}
+
+/* try it */
+
+.try {
+  display: grid;
+  gap: 26px;
+  padding: 32px;
+}
+
+.swatches {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.swatch {
+  display: grid;
+  gap: 8px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  font: 700 14px/1.2 var(--display);
+  text-align: left;
+  cursor: pointer;
+}
+
+.swatch__tile {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 14%;
+  height: 92px;
+  padding-top: 12px;
+  border: 2px solid rgb(255 255 255 / 0.15);
+  border-radius: 16px;
+  box-sizing: border-box;
+  overflow: hidden;
+  transition:
+    transform 0.15s,
+    border-color 0.15s,
+    box-shadow 0.15s;
+}
+
+/* three falling streaks: bright at the bottom (the head), fading towards the top */
+.swatch__drop {
+  width: 6px;
+  height: 58px;
+  border-radius: 3px;
+  mask-image: linear-gradient(transparent, #000);
+}
+
+.swatch__drop:nth-child(2) {
+  height: 40px;
+  margin-top: 20px;
+}
+
+.swatch__drop:nth-child(3) {
+  height: 50px;
+  margin-top: 6px;
+}
+
+.swatch:hover .swatch__tile {
+  transform: translateY(-2px);
+}
+
+.swatch[aria-pressed='true'] .swatch__tile {
+  border-color: var(--pink);
+  box-shadow: 0 0 0 4px rgb(255 156 203 / 0.25);
+}
+
+.try__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 18px 40px;
+}
+
+.try__group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 18px;
+}
+
+.try__label {
+  color: var(--muted);
+  font: 700 12px/1 var(--display);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.segmented {
+  display: inline-flex;
+  padding: 4px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.07);
+}
+
+.segmented button {
+  padding: 8px 16px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink);
+  font: 700 14px/1 var(--display);
+  cursor: pointer;
+}
+
+.segmented button[aria-pressed='true'] {
+  background: var(--pink-strong);
+  box-shadow: 0 4px 14px rgb(255 111 168 / 0.4);
+}
+
+.switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  font: 700 14px/1 var(--display);
+  cursor: pointer;
+}
+
+.switch__track {
+  position: relative;
+  width: 40px;
+  height: 22px;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.2);
+  transition: background 0.15s;
+}
+
+.switch__thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform 0.15s;
+}
+
+.switch[aria-checked='true'] .switch__track {
+  background: var(--pink-strong);
+}
+
+.switch[aria-checked='true'] .switch__thumb {
+  transform: translateX(18px);
+}
+
+/* features */
+
+.features {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.feature {
+  padding: 28px;
+}
+
+.feature__icon {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  margin-bottom: 14px;
+  border-radius: 14px;
+  background: rgb(255 111 168 / 0.16);
+  color: var(--pink);
+  font: 800 24px/1 var(--display);
+}
+
+.site h3 {
+  margin: 0 0 6px;
+  font: 800 20px/1.25 var(--display);
+}
+
+.feature p,
+.step p {
+  margin: 0;
+  color: var(--muted);
+}
+
+/* install */
+
+.install {
+  padding: 32px;
+}
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  margin: 20px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.step {
+  padding: 22px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: rgb(255 255 255 / 0.05);
+}
+
+.step__num {
+  display: block;
+  margin-bottom: 10px;
+  color: transparent;
+  font: 800 36px/1 var(--display);
+  -webkit-text-stroke: 1.5px var(--pink);
+}
+
+.site .step h3 {
+  font-size: 18px;
+}
+
+/* closing call to action, straight on the rain with a soft scrim */
+
+.cta {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  justify-items: center;
+  gap: 22px;
+  padding: 72px 24px;
+  text-align: center;
+}
+
+.cta::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(ellipse 45% 65% at 50% 50%, rgb(var(--scrim) / 0.8), transparent 80%);
+  pointer-events: none;
+}
+
+.footer {
+  padding: 8px 24px 40px;
+  color: var(--muted);
+  font-size: 14px;
+  text-align: center;
+}
+
+@media (max-width: 860px) {
+  .features,
+  .steps {
+    grid-template-columns: 1fr;
+  }
+
+  .swatches {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .nav,
+  .hero,
+  .sections {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .hero::before {
+    background: rgb(var(--scrim) / 0.6);
+  }
+
+  .try,
+  .install,
+  .feature {
+    padding: 22px;
+  }
+
+  .hero__actions .btn {
+    flex: 1 1 100%;
+    justify-content: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site {
+    scroll-behavior: auto;
+  }
+
+  .site .scroll-cue {
+    animation: none;
+  }
+}
+
+/* ---------- full-screen demo ---------- */
+
+.demo {
+  position: fixed;
+  inset: 0;
+}
+
+.demo__bar {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font: 600 13px/1 'Segoe UI', system-ui, sans-serif;
+  transition: opacity 0.4s;
+}
+
+.demo__btn {
+  padding: 8px 14px;
+  border: 1px solid rgb(255 255 255 / 0.25);
+  border-radius: 999px;
+  background: rgb(6 20 50 / 0.7);
+  backdrop-filter: blur(8px);
+  color: #fff;
+  font: inherit;
+  cursor: pointer;
+}
+
+.demo__btn--back {
+  color: #ff9ccb;
+}
+
+.demo__hint {
+  color: rgb(255 255 255 / 0.6);
+}
+
+.demo .panel {
+  transition: opacity 0.4s;
+}
+
+/* after a few still seconds the controls and the cursor fade away, unless the settings are open */
+.demo--idle:not(:has(.panel__body)) {
+  cursor: none;
+}
+
+/* only hidden, still clickable: a click or tap right away still hits the buttons */
+.demo--idle:not(:has(.panel__body)) .demo__bar,
+.demo--idle:not(:has(.panel__body)) .panel {
+  opacity: 0;
+}

@@ -16,7 +16,7 @@ body,
   height: 100%;
 }
 
-/* Preview settings panel (?panel) */
+/* Preview settings panel (?panel, and the showcase's full-screen demo) */
 .panel {
   position: fixed;
   top: 16px;
@@ -52,7 +52,6 @@ body,
 
 .panel h2 {
   margin: 0 0 12px;
-  font-size: 18px;
   font-size: 22px;
   color: #ff9ccb;
 }
@@ -92,182 +91,4 @@ body,
   margin: 10px 0 0;
   color: #ffe0ef;
   font-size: 12px;
-}
-
-/* Showcase page (npm run dev:site / build:site). The live wallpaper canvas sits behind it. */
-.site {
-  position: fixed;
-  inset: 0;
-  overflow-y: auto;
-  color: #f4f7ff;
-  font: 16px/1.6 'Segoe UI', system-ui, sans-serif;
-}
-
-.site a {
-  color: #9fe3fb;
-}
-
-.site__top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  max-width: 1120px;
-  margin: 0 auto;
-  padding: 20px 24px;
-}
-
-.site__back,
-.site__link {
-  padding: 6px 14px;
-  border: 1px solid rgb(255 255 255 / 0.2);
-  border-radius: 999px;
-  background: rgb(6 20 50 / 0.6);
-  backdrop-filter: blur(8px);
-  text-decoration: none;
-  font-weight: 600;
-}
-
-.site .site__back {
-  color: #ff9ccb;
-}
-
-.site__main {
-  display: grid;
-  gap: 20px;
-  max-width: 1120px;
-  margin: 0 auto;
-  padding: 24px 24px 40px;
-}
-
-.card {
-  max-width: 620px;
-  padding: 28px;
-  border: 1px solid rgb(255 255 255 / 0.12);
-  border-radius: 22px;
-  background: rgb(6 20 50 / 0.74);
-  backdrop-filter: blur(12px);
-}
-
-.card h2 {
-  margin: 0 0 8px;
-  font-size: 22px;
-  color: #ff9ccb;
-}
-
-.card p {
-  margin: 0 0 14px;
-}
-
-.hero {
-  margin-top: 8vh;
-}
-
-.hero h1 {
-  margin: 0;
-  font-size: clamp(48px, 9vw, 84px);
-  line-height: 1;
-  letter-spacing: -0.02em;
-  color: #fff;
-  text-shadow: 0 0 24px rgb(255 127 191 / 0.7);
-}
-
-.hero__tagline {
-  margin: 16px 0 22px;
-  font-size: 18px;
-}
-
-.hero__actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-}
-
-.btn {
-  display: inline-block;
-  padding: 12px 22px;
-  border: 1px solid rgb(255 255 255 / 0.35);
-  border-radius: 999px;
-  color: #fff;
-  font-weight: 600;
-  text-decoration: none;
-}
-
-.site .btn {
-  color: #fff;
-}
-
-.btn--primary {
-  border-color: transparent;
-  background: #ff6fa8;
-  box-shadow: 0 0 22px rgb(255 111 168 / 0.55);
-}
-
-.btn:hover {
-  filter: brightness(1.1);
-}
-
-.hero__fine {
-  margin: 14px 0 0;
-  font-size: 13px;
-  color: #c9d6f2;
-}
-
-.chips {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px;
-  margin-top: 12px;
-}
-
-.chips__label {
-  min-width: 64px;
-  font-size: 13px;
-  color: #c9d6f2;
-}
-
-.chip {
-  padding: 6px 14px;
-  border: 1px solid rgb(255 255 255 / 0.25);
-  border-radius: 999px;
-  background: transparent;
-  color: #fff;
-  font: inherit;
-  font-size: 14px;
-  cursor: pointer;
-}
-
-.chip[aria-pressed='true'] {
-  border-color: transparent;
-  background: #ff6fa8;
-}
-
-.steps,
-.features {
-  margin: 0;
-  padding-left: 22px;
-}
-
-.steps li,
-.features li {
-  margin-bottom: 8px;
-}
-
-.site__footer {
-  padding: 24px;
-  text-align: center;
-  font-size: 14px;
-  color: #c9d6f2;
-}
-
-@media (max-width: 640px) {
-  .site__top,
-  .site__main {
-    padding-left: 16px;
-    padding-right: 16px;
-  }
-
-  .card {
-    padding: 20px;
-  }
 }

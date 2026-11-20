@@ -36,9 +36,9 @@ function Select({ label, value, options, onChange }: { label: string; value: num
  * Only for the browser preview (?panel in the URL). In Lively the same settings
  * live in the wallpaper's Customise menu.
  */
-export function SettingsPanel() {
+export function SettingsPanel({ defaultOpen = true }: { defaultOpen?: boolean }) {
   const settings = useSettings()
-  const [open, setOpen] = useState(true)
+  const [open, setOpen] = useState(defaultOpen)
 
   return (
     <aside className="panel">
